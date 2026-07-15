@@ -1,0 +1,10 @@
+portfolio-analyzer-backend/
+├── src/
+│   ├── services/
+│   │   ├── githubService.ts
+│   │   └── aiService.ts
+│   ├── index.ts
+│   └── config.ts
+├── .env
+├── package.json
+└── tsconfig.json
