@@ -7,6 +7,7 @@ export const octokit = new Octokit({
 });
 
 export class GitHubService {
+  // This is what you added in Commit 4:
   async getUserProfile(username: string) {
     try {
       const { data } = await octokit.users.getByUsername({ username });
@@ -22,6 +23,32 @@ export class GitHubService {
       };
     } catch (error) {
       throw new Error(`[GitHubService] Error fetching user profile: ${(error as Error).message}`);
+    }
+  }
+
+  // THIS IS THE NEW LINE YOU ARE ADDING FOR COMMIT 5:
+  async getUserRepositories(username: string) {
+    try {
+      const { data: repos } = await octokit.repos.listForUser({
+        username,
+        sort: 'updated',
+        per_page: 50,
+      });
+
+      return repos
+        .filter((repo) => !repo.fork)
+        .map((repo) => ({
+          name: repo.name,
+          description: repo.description,
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          language: repo.language,
+          updatedAt: repo.updated_at,
+          url: repo.html_url,
+          size: repo.size,
+        }));
+    } catch (error) {
+      throw new Error(`[GitHubService] Error fetching repositories: ${(error as Error).message}`);
     }
   }
 }
