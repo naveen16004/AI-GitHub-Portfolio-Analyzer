@@ -66,5 +66,54 @@ Development Mode (Hot Reload):
 ```
 npm run dev
 ```
+CLI Integration Test:
 
+Bash
+```
+npm run test:cli
+```
+Production Build:
+```
+npm run build
+npm start
+```
+API Reference
+Analyze GitHub Profile
+```
+GET /api/analyze/:username
+```
+Sample Response:
+```
+{
+  "success": true,
+  "cached": false,
+  "data": {
+    "profile": {
+      "login": "naveen16004",
+      "publicRepos": 12,
+      "followers": 15
+    },
+    "analysis": {
+      "scores": {
+        "overallScore": 88,
+        "developerTier": "TypeScript Wizard",
+        "scores": {
+          "documentation": 80,
+          "codeQuality": 90,
+          "impact": 85,
+          "consistency": 92,
+          "diversity": 85
+        },
+        "summary": "Strong core developer with consistent commit habits across modern full-stack web technologies."
+      },
+      "roast": "Your repos have fewer readmes than a silent film, but at least your TypeScript types are tighter than your git commit messages...",
+      "roadmap": [
+        "Add Docker containerization to Express backend repos.",
+        "Implement end-to-end integration test suites using Playwright.",
+        "Set up GitHub Actions CI/CD pipelines for automated testing."
+      ]
+    }
+  }
+}
+```
 
