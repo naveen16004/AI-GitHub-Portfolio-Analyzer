@@ -73,3 +73,4 @@ Repos: ${JSON.stringify(reposData)}`;
 
     return await this.generateText(prompt, systemInstruction);
   }
+}
