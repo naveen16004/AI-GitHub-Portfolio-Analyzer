@@ -73,4 +73,19 @@ Repos: ${JSON.stringify(reposData)}`;
 
     return await this.generateText(prompt, systemInstruction);
   }
+
+  // Commit 11: Roadmap Engine
+  async generateRoadmap(profileData: any, reposData: any[]): Promise<string[]> {
+    const systemInstruction = `You are a Senior Tech Lead mapping out a career roadmap. 
+Analyze this developer's GitHub repos and generate 3 concrete, actionable project ideas or technology gaps they should focus on next to level up their portfolio. 
+Return ONLY a valid JSON array of strings containing 3 distinct bullet points.
+Example format: ["Build a full-stack App with Next.js and Prisma", "Add Docker configuration and CI/CD pipelines to existing repos", "Improve documentation and add comprehensive test coverage"]`;
+
+    const prompt = `Profile: ${JSON.stringify(profileData)}
+Repos: ${JSON.stringify(reposData)}`;
+
+    const rawResponse = await this.generateText(prompt, systemInstruction);
+    const cleaned = rawResponse.replace(/```json|```/g, '').trim();
+    return JSON.parse(cleaned);
+  }
 }
