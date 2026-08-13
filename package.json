@@ -1,0 +1,10 @@
+{
+  "name": "github-portfolio-analyzer-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix portfolio-analyzer-backend run dev",
+    "build": "npm --prefix portfolio-analyzer-backend run build",
+    "start": "npm --prefix portfolio-analyzer-backend run start",
+    "test:cli": "npm --prefix portfolio-analyzer-backend run test:cli"
+  }
+}

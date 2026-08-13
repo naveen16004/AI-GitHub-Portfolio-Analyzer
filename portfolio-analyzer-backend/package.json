@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "tsx watch src/index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js",
-  "test:cli": "tsx src/test-cli.ts"
-},
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test:cli": "tsx src/test-cli.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^2.17.0",
     "@octokit/rest": "^22.0.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
