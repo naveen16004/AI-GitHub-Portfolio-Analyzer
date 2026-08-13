@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { GitHubService } from '../services/githubService.js';
 import { AIService } from '../services/aiService.js';
+import { globalCache } from '../services/cacheService.js';
 
 const githubService = new GitHubService();
 const aiService = new AIService();
@@ -15,12 +16,29 @@ export async function analyzeProfile(req: Request, res: Response) {
     return;
   }
 
+  // 1. Check cache first
+  const cacheKey = `analysis:${username.toLowerCase()}`;
+  const cachedData = globalCache.get(cacheKey);
+  if (cachedData) {
+    console.log(`⚡ Returning cached analysis for: ${username}`);
+    res.json({ success: true, cached: true, data: cachedData });
+    return;
+  }
+
   try {
     console.log(`🔍 Fetching GitHub data for: ${username}`);
     const [profile, repos] = await Promise.all([
       githubService.getUserProfile(username),
       githubService.getUserRepositories(username),
     ]);
+
+    if (!repos || repos.length === 0) {
+      res.status(404).json({
+        success: false,
+        error: 'No public non-fork repositories found for this user.',
+      });
+      return;
+    }
 
     console.log(`🤖 Running AI analysis engine for: ${username}`);
     const [scores, roast, roadmap] = await Promise.all([
@@ -29,17 +47,23 @@ export async function analyzeProfile(req: Request, res: Response) {
       aiService.generateRoadmap(profile, repos),
     ]);
 
+    const responsePayload = {
+      profile,
+      repos,
+      analysis: {
+        scores,
+        roast,
+        roadmap,
+      },
+    };
+
+    // Save result to cache
+    globalCache.set(cacheKey, responsePayload);
+
     res.json({
       success: true,
-      data: {
-        profile,
-        repos,
-        analysis: {
-          scores,
-          roast,
-          roadmap,
-        },
-      },
+      cached: false,
+      data: responsePayload,
     });
   } catch (error) {
     console.error(`❌ Analysis failed:`, error);
